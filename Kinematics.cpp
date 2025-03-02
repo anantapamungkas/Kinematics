@@ -3,7 +3,8 @@
 Kinematics::Kinematics(float maxSpeed, float minSpeed, float integralMax)
   : Kp(1.0), Ki(0.0), Kd(0.0), integralMax(integralMax), integralTerm(0), previousError(0),
     maxSpeed(maxSpeed), minSpeed(minSpeed), derivativeFiltered(0), alpha(0.1),
-    currentX(0), currentY(0), currentAngle(0) {
+    currentX(0), currentY(0), currentAngle(0), targetX(0), targetY(0), targetAngle(0),
+    distanceError(0), angleError(0) {
   
   // Default angles for standard mecanum drive
   angles[0] = 45;
@@ -62,14 +63,38 @@ void Kinematics::inverse(float Vx, float Vy, float Vw) {
   }
 }
 
-void Kinematics::move(float targetX, float targetY, float targetAngle) {
+// ✅ **New function to update errors**
+void Kinematics::updateErrors() {
+  float errorX = targetX - currentX;
+  float errorY = targetY - currentY;
+  distanceError = sqrt(errorX * errorX + errorY * errorY);  // Euclidean distance
+
+  float error = targetAngle - currentAngle;
+  angleError = fmod((error + 180), 360) - 180;  // Normalize to [-180, 180] range
+}
+
+void Kinematics::move(float newTargetX, float newTargetY, float newTargetAngle) {
+  // Store the target values inside the class
+  targetX = newTargetX;
+  targetY = newTargetY;
+  targetAngle = newTargetAngle;
+
+  // Update error values
+  updateErrors();
+
+  // PID control
   float driveX = calculatePID(targetX, currentX);
   float driveY = calculatePID(targetY, currentY);
   float driveAngle = calculatePID(targetAngle, currentAngle);
   inverse(driveX, driveY, driveAngle);
 }
 
-void Kinematics::rotate(float targetAngle) {
+void Kinematics::rotate(float newTargetAngle) {
+  targetAngle = newTargetAngle;
+
+  // Update angle error
+  updateErrors();
+
   float drive = calculatePID(targetAngle, currentAngle);
   inverse(0, 0, drive);
 }
