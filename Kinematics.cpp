@@ -98,3 +98,11 @@ void Kinematics::rotate(float newTargetAngle) {
   float drive = calculatePID(targetAngle, currentAngle);
   inverse(0, 0, drive);
 }
+
+void Kinematics::stop() {
+  wheelA = 0;
+  wheelB = 0;
+  wheelC = 0;
+  wheelD = 0;
+}
+
