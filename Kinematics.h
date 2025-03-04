@@ -34,6 +34,7 @@ public:
   void inverse(float Vx, float Vy, float Vw);
   void move(float targetX, float targetY, float targetAngle);
   void rotate(float targetAngle);
+  void stop();
 };
 
 #endif
