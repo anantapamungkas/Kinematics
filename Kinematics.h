@@ -9,6 +9,7 @@ private:
   float Kp, Ki, Kd;
   float integralTerm, previousError;
   float integralMax;
+  float maxSpeed, minSpeed;  // Now public and adjustable
   float derivativeFiltered;
   float alpha;  // Smoothing factor for derivative
   float angles[4];  // Dynamic wheel angles
@@ -20,7 +21,6 @@ public:
   float wheelA, wheelB, wheelC, wheelD;
   float currentX, currentY, currentAngle;  // Updated dynamically from sensors
   float targetX, targetY, targetAngle;     // Store target values
-  float maxSpeed, minSpeed;  // Now public and adjustable
 
   // Publicly accessible error variables
   float distanceError;
