@@ -9,7 +9,6 @@ private:
   float Kp, Ki, Kd;
   float integralTerm, previousError;
   float integralMax;
-  float maxSpeed, minSpeed;
   float derivativeFiltered;
   float alpha;  // Smoothing factor for derivative
   float angles[4];  // Dynamic wheel angles
