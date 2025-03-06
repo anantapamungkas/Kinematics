@@ -31,11 +31,6 @@ void Kinematics::setWheelAngles(float angleA, float angleB, float angleC, float 
   angles[3] = angleD;
 }
 
-void Kinematics::setSpeedLimits(float max, float min) {
-  maxSpeed = max;
-  minSpeed = min;
-}
-
 void Kinematics::updatePosition(float x, float y, float angle) {
   currentX = x;
   currentY = y;
