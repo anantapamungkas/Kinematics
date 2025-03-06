@@ -21,19 +21,22 @@ public:
   float wheelA, wheelB, wheelC, wheelD;
   float currentX, currentY, currentAngle;  // Updated dynamically from sensors
   float targetX, targetY, targetAngle;     // Store target values
+  float maxSpeed, minSpeed;  // Now public and adjustable
 
   // Publicly accessible error variables
   float distanceError;
   float angleError;
 
-  Kinematics(float maxSpeed, float minSpeed = 0, float integralMax = 10.0);
+  Kinematics(float integralMax = 10.0);
 
+  void setSpeedLimits(float max, float min);
   void setPIDGains(float Kp, float Ki, float Kd);
   void setWheelAngles(float angleA, float angleB, float angleC, float angleD);
   void updatePosition(float x, float y, float angle);
   void inverse(float Vx, float Vy, float Vw);
   void move(float targetX, float targetY, float targetAngle);
   void rotate(float targetAngle);
+  void stop();
 };
 
 #endif

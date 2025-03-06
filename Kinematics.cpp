@@ -1,16 +1,21 @@
 #include "Kinematics.h"
 
-Kinematics::Kinematics(float maxSpeed, float minSpeed, float integralMax)
+Kinematics::Kinematics(float integralMax)
   : Kp(1.0), Ki(0.0), Kd(0.0), integralMax(integralMax), integralTerm(0), previousError(0),
-    maxSpeed(maxSpeed), minSpeed(minSpeed), derivativeFiltered(0), alpha(0.1),
-    currentX(0), currentY(0), currentAngle(0), targetX(0), targetY(0), targetAngle(0),
-    distanceError(0), angleError(0) {
+    derivativeFiltered(0), alpha(0.1), currentX(0), currentY(0), currentAngle(0),
+    targetX(0), targetY(0), targetAngle(0), distanceError(0), angleError(0),
+    maxSpeed(1.0), minSpeed(0.0) {  // Default values for speed
   
   // Default angles for standard mecanum drive
   angles[0] = 45;
   angles[1] = 135;
   angles[2] = 225;
   angles[3] = 315;
+}
+
+void Kinematics::setSpeedLimits(float max, float min) {
+  maxSpeed = max;
+  minSpeed = min;
 }
 
 void Kinematics::setPIDGains(float newKp, float newKi, float newKd) {
@@ -24,6 +29,11 @@ void Kinematics::setWheelAngles(float angleA, float angleB, float angleC, float 
   angles[1] = angleB;
   angles[2] = angleC;
   angles[3] = angleD;
+}
+
+void Kinematics::setSpeedLimits(float max, float min) {
+  maxSpeed = max;
+  minSpeed = min;
 }
 
 void Kinematics::updatePosition(float x, float y, float angle) {
@@ -97,4 +107,11 @@ void Kinematics::rotate(float newTargetAngle) {
 
   float drive = calculatePID(targetAngle, currentAngle);
   inverse(0, 0, drive);
+}
+
+void Kinematics::stop() {
+  wheelA = 0;
+  wheelB = 0;
+  wheelC = 0;
+  wheelD = 0;
 }
